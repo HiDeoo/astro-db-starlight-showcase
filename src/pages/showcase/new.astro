@@ -2,9 +2,9 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { LibsqlError } from '@libsql/client'
 
-import FormErrors from '../../components/FormErrors.astro'
+import FormErrorCard, { type FormErrors } from '../../components/FormErrorCard.astro'
 import FormField from '../../components/FormField.astro'
-import { newShowcaseEntrySchema } from '../../libs/schema'
+import { addShowcaseEntrySchema } from '../../libs/schema'
 import { addShowcaseEntry } from '../../libs/showcase'
 
 export const prerender = false
@@ -13,19 +13,19 @@ if (!Astro.locals.user) {
   return Astro.redirect('/showcase/login/')
 }
 
-const formErrors: Record<string, { errors: string[]; value: string | null }> = {}
+const formErrors: FormErrors = {}
 
 if (Astro.request.method === 'POST') {
   try {
     const data = await Astro.request.formData()
-    const parsedNewEntry = newShowcaseEntrySchema.safeParse(data)
+    const parsedNewEntry = addShowcaseEntrySchema.safeParse(data)
 
     if (parsedNewEntry.success) {
       await addShowcaseEntry(Astro.locals.user, parsedNewEntry.data.url, parsedNewEntry.data.name)
     } else {
-      for (const [field, errors] of Object.entries(parsedNewEntry.error.flatten().fieldErrors)) {
+      for (const [field, messages] of Object.entries(parsedNewEntry.error.flatten().fieldErrors)) {
         const value = data.get(field)
-        formErrors[field] = { errors, value: typeof value === 'string' ? value : null }
+        formErrors[field] = { messages, value: typeof value === 'string' ? value : undefined }
       }
     }
 
@@ -39,23 +39,16 @@ if (Astro.request.method === 'POST') {
       console.error('Failed to submit new showcase entry', error)
     }
 
-    formErrors['submit'] = { errors: [message], value: null }
+    formErrors['submit'] = { messages: [message] }
   }
 }
 ---
 
 <StarlightPage frontmatter={{ title: '// TODO(HiDeoo) ', tableOfContents: false }}>
-  <FormErrors errors={formErrors.submit?.errors} />
+  <FormErrorCard error={formErrors.submit} />
   <form method="post">
-    <FormField fieldErrors={formErrors.url} label="URL" name="url" placeholder="// TODO(HiDeoo) " required type="url" />
-    <FormField
-      fieldErrors={formErrors.name}
-      label="Name"
-      name="name"
-      placeholder="// TODO(HiDeoo) "
-      required
-      type="text"
-    />
+    <FormField error={formErrors.url} label="URL" name="url" placeholder="// TODO(HiDeoo) " required type="url" />
+    <FormField error={formErrors.name} label="Name" name="name" placeholder="// TODO(HiDeoo) " required type="text" />
     <button type="submit">Submit</button>
   </form>
 </StarlightPage>

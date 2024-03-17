@@ -1,0 +1,25 @@
+---
+import type { ShowcaseEntry } from '../libs/showcase'
+
+interface Props {
+  entry: ShowcaseEntry
+  showControls?: boolean
+}
+
+const { entry, showControls = false } = Astro.props
+---
+
+<li>
+  <a href={entry.url}>
+    <p>{entry.name}</p>
+  </a>
+  {
+    showControls && (
+      <form method="post">
+        <input type="hidden" name="action" value="delete" />
+        <input type="hidden" name="id" value={entry.id} />
+        <button type="submit">Delete</button>
+      </form>
+    )
+  }
+</li>

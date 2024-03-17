@@ -1,0 +1,15 @@
+---
+import ShowcaseCard from '../components/ShowcaseCard.astro'
+import type { ShowcaseEntry } from '../libs/showcase'
+
+interface Props {
+  entries: ShowcaseEntry[]
+  showControls?: boolean
+}
+
+const { entries, showControls } = Astro.props
+---
+
+<ul>
+  {entries.map((entry) => <ShowcaseCard {entry} {showControls} />)}
+</ul>

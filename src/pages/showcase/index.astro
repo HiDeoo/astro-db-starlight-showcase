@@ -1,10 +1,12 @@
 ---
-import { db, ShowcaseEntry } from 'astro:db'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+
+import ShowcaseList from '../../components/ShowcaseList.astro'
+import { getApprovedShowcaseEntries } from '../../libs/showcase'
 
 export const prerender = false
 
-const showcaseEntries = await db.select().from(ShowcaseEntry)
+const entries = await getApprovedShowcaseEntries()
 ---
 
 <StarlightPage frontmatter={{ title: 'Showcase', tableOfContents: false }}>
@@ -22,12 +24,5 @@ const showcaseEntries = await db.select().from(ShowcaseEntry)
       </div>
     )
   }
-  {
-    showcaseEntries.map(({ url, title }) => (
-      <article>
-        <p>URL: {url}</p>
-        <p>TITLE: {title}</p>
-      </article>
-    ))
-  }
+  <ShowcaseList {entries} />
 </StarlightPage>

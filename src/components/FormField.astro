@@ -1,10 +1,10 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-import FormErrors from './FormErrors.astro'
+import FormErrorCard, { type FormError } from './FormErrorCard.astro'
 
 interface Props {
-  fieldErrors?: { errors: string[]; value: string | null }
+  error?: FormError
   label: string
   name: string
   placeholder: string
@@ -12,11 +12,11 @@ interface Props {
   type: HTMLAttributes<'input'>['type']
 }
 
-const { fieldErrors, label, name, placeholder, required = false, type } = Astro.props
+const { error, label, name, placeholder, required = false, type } = Astro.props
 ---
 
-<FormErrors errors={fieldErrors?.errors} />
+<FormErrorCard {error} />
 <label>
   {label}
-  <input {name} {placeholder} {required} {type} value={fieldErrors?.value} />
+  <input {name} {placeholder} {required} {type} value={error?.value} />
 </label>
