@@ -1,4 +1,4 @@
-import { and, db, desc, eq, ShowcaseEntry, ShowcaseUser } from 'astro:db'
+import { and, db, desc, eq, isNotNull, isNull, ShowcaseEntry, ShowcaseUser, sql } from 'astro:db'
 
 export const PERMISSIONS = {
   default: 0,
@@ -6,8 +6,23 @@ export const PERMISSIONS = {
 }
 
 export function getApprovedShowcaseEntries() {
-  // TODO(HiDeoo) public
-  return db.select().from(ShowcaseEntry).orderBy(desc(ShowcaseEntry.createdAt))
+  return db.select().from(ShowcaseEntry).where(eq(ShowcaseEntry.approved, true)).orderBy(desc(ShowcaseEntry.createdAt))
+}
+
+export function getPristineUnapprovedShowcaseEntries() {
+  return db
+    .select()
+    .from(ShowcaseEntry)
+    .where(and(eq(ShowcaseEntry.approved, false), isNull(ShowcaseEntry.updatedAt)))
+    .orderBy(desc(ShowcaseEntry.createdAt))
+}
+
+export function getTouchedUnapprovedShowcaseEntries() {
+  return db
+    .select()
+    .from(ShowcaseEntry)
+    .where(and(eq(ShowcaseEntry.approved, false), isNotNull(ShowcaseEntry.updatedAt)))
+    .orderBy(desc(ShowcaseEntry.createdAt))
 }
 
 export function addShowcaseEntry(user: ShowcaseUser, url: string, name: string) {
@@ -24,6 +39,13 @@ export function getUserShowcaseEntries(user: ShowcaseUser) {
 
 export function deleteUsersShowcaseEntry(user: ShowcaseUser, id: string) {
   return db.delete(ShowcaseEntry).where(and(eq(ShowcaseEntry.userId, user.id), eq(ShowcaseEntry.id, id)))
+}
+
+export function toggleShowcaseEntryApproval(id: string, approved: boolean) {
+  return db
+    .update(ShowcaseEntry)
+    .set({ approved, updatedAt: sql`CURRENT_TIMESTAMP` })
+    .where(eq(ShowcaseEntry.id, id))
 }
 
 export function isUserAdmin(user: ShowcaseUser) {

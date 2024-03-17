@@ -4,9 +4,10 @@ import type { ShowcaseEntry } from '../libs/showcase'
 interface Props {
   entry: ShowcaseEntry
   showControls?: boolean
+  showAdminControls?: boolean
 }
 
-const { entry, showControls = false } = Astro.props
+const { entry, showControls = false, showAdminControls = false } = Astro.props
 ---
 
 <li>
@@ -19,6 +20,15 @@ const { entry, showControls = false } = Astro.props
         <input type="hidden" name="action" value="delete" />
         <input type="hidden" name="id" value={entry.id} />
         <button type="submit">Delete</button>
+      </form>
+    )
+  }
+  {
+    showAdminControls && (
+      <form method="post">
+        <input type="hidden" name="action" value={entry.approved ? 'reject' : 'approve'} />
+        <input type="hidden" name="id" value={entry.id} />
+        <button type="submit">{entry.approved ? 'Reject' : 'Approve'}</button>
       </form>
     )
   }

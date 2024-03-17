@@ -1,6 +1,6 @@
 ---
 export interface FormError {
-  messages: string[]
+  messages?: string[]
   value?: string
 }
 
@@ -12,7 +12,7 @@ interface Props {
 
 const { error } = Astro.props
 
-if (!error) {
+if (!error?.messages) {
   return
 }
 ---

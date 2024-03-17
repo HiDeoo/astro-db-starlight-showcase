@@ -16,7 +16,7 @@ const entries = await getApprovedShowcaseEntries()
   {
     Astro.locals.user ? (
       <>
-        <div>{isUserAdmin(Astro.locals.user) ? 'ADMIN' : 'NOT ADMIN'}</div>
+        {isUserAdmin(Astro.locals.user) ? <a href="/showcase/admin">Admin</a> : null}
         <form method="post" action="/showcase/logout">
           <button>Sign out</button>
         </form>

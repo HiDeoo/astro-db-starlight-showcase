@@ -23,13 +23,15 @@ if (Astro.request.method === 'POST') {
     if (parsedNewEntry.success) {
       await addShowcaseEntry(Astro.locals.user, parsedNewEntry.data.url, parsedNewEntry.data.name)
     } else {
-      for (const [field, messages] of Object.entries(parsedNewEntry.error.flatten().fieldErrors)) {
+      const errors = Object.fromEntries(Object.entries(parsedNewEntry.error.flatten().fieldErrors))
+
+      for (const field of ['url', 'name']) {
         const value = data.get(field)
-        formErrors[field] = { messages, value: typeof value === 'string' ? value : undefined }
+        formErrors[field] = { messages: errors[field], value: typeof value === 'string' ? value : undefined }
       }
     }
 
-    // TODO(HiDeoo) redirect
+    return Astro.redirect('/showcase/dashboard/')
   } catch (error) {
     let message = 'Something went wrong. Please try again later.'
 
