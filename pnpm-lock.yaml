@@ -17,6 +17,9 @@ dependencies:
   '@astrojs/vercel':
     specifier: 7.3.6
     version: 7.3.6(astro@4.5.5)
+  '@libsql/client':
+    specifier: 0.5.6
+    version: 0.5.6
   arctic:
     specifier: ^1.2.1
     version: 1.2.1
@@ -35,6 +38,9 @@ dependencies:
   typescript:
     specifier: ^5.4.2
     version: 5.4.2
+  zod-form-data:
+    specifier: ^2.0.2
+    version: 2.0.2(zod@3.22.4)
 
 devDependencies:
   '@hideoo/prettier-config':
@@ -5735,6 +5741,14 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
+    dev: false
+
+  /zod-form-data@2.0.2(zod@3.22.4):
+    resolution: {integrity: sha512-sKTi+k0fvkxdakD0V5rq+9WVJA3cuTQUfEmNqvHrTzPLvjfLmkkBLfR0ed3qOi9MScJXTHIDH/jUNnEJ3CBX4g==}
+    peerDependencies:
+      zod: '>= 3.11.0'
+    dependencies:
+      zod: 3.22.4
     dev: false
 
   /zod-to-json-schema@3.22.4(zod@3.22.4):

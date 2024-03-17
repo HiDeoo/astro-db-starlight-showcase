@@ -30,6 +30,10 @@ export default defineConfig({
             directory: 'reference',
           },
         },
+        {
+          label: 'Showcase',
+          link: '/showcase/',
+        },
       ],
     }),
   ],

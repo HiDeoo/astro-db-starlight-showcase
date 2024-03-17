@@ -20,13 +20,12 @@ const ShowcaseUser = defineTable({
 
 const ShowcaseEntry = defineTable({
   columns: {
-    // TODO(HiDeoo) id?
-    url: column.text(),
-    title: column.text(),
+    id: column.text({ primaryKey: true, default: sql`uuid()` }),
+    userId: column.text({ references: () => ShowcaseUser.columns.id }),
+    url: column.text({ unique: true }),
+    name: column.text({ unique: true }),
+    createdAt: column.date({ default: sql`CURRENT_TIMESTAMP` }),
     // TODO(HiDeoo) image
-
-    // TODO(HiDeoo) createdAt
-    // TODO(HiDeoo) validatedAt
     // TODO(HiDeoo) public
   },
 })
