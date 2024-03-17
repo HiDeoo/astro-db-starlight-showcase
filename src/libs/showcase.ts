@@ -1,4 +1,5 @@
 import { and, db, desc, eq, isNotNull, isNull, ShowcaseEntry, ShowcaseUser, sql } from 'astro:db'
+import { uploadImage, deleteImage } from './r2'
 
 export const PERMISSIONS = {
   default: 0,
@@ -25,11 +26,14 @@ export function getTouchedUnapprovedShowcaseEntries() {
     .orderBy(desc(ShowcaseEntry.createdAt))
 }
 
-export function addShowcaseEntry(user: ShowcaseUser, url: string, name: string) {
+export async function addShowcaseEntry(user: ShowcaseUser, url: string, name: string, image: File) {
+  const imageFileName = await uploadImage(image)
+
   return db.insert(ShowcaseEntry).values({
     userId: user.id,
     url: url,
     name: name,
+    imageFileName,
   })
 }
 
@@ -37,7 +41,19 @@ export function getUserShowcaseEntries(user: ShowcaseUser) {
   return db.select().from(ShowcaseEntry).where(eq(ShowcaseEntry.userId, user.id)).orderBy(desc(ShowcaseEntry.createdAt))
 }
 
-export function deleteUsersShowcaseEntry(user: ShowcaseUser, id: string) {
+export async function deleteUsersShowcaseEntry(user: ShowcaseUser, id: string) {
+  const entry = await db
+    .select()
+    .from(ShowcaseEntry)
+    .where(and(eq(ShowcaseEntry.userId, user.id), eq(ShowcaseEntry.id, id)))
+    .get()
+
+  if (!entry) {
+    throw new Error('Entry to delete not found.')
+  }
+
+  await deleteImage(entry.imageFileName)
+
   return db.delete(ShowcaseEntry).where(and(eq(ShowcaseEntry.userId, user.id), eq(ShowcaseEntry.id, id)))
 }
 

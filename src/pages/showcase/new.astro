@@ -18,20 +18,26 @@ const formErrors: FormErrors = {}
 if (Astro.request.method === 'POST') {
   try {
     const data = await Astro.request.formData()
-    const parsedNewEntry = addShowcaseEntrySchema.safeParse(data)
+    const parsedNewEntry = await addShowcaseEntrySchema.safeParseAsync(data)
+    console.log('🚨 [new.astro:22] parsedNewEntry:', parsedNewEntry)
 
     if (parsedNewEntry.success) {
-      await addShowcaseEntry(Astro.locals.user, parsedNewEntry.data.url, parsedNewEntry.data.name)
+      await addShowcaseEntry(
+        Astro.locals.user,
+        parsedNewEntry.data.url,
+        parsedNewEntry.data.name,
+        parsedNewEntry.data.image,
+      )
+
+      return Astro.redirect('/showcase/dashboard/')
     } else {
       const errors = Object.fromEntries(Object.entries(parsedNewEntry.error.flatten().fieldErrors))
 
-      for (const field of ['url', 'name']) {
+      for (const field of ['url', 'name', 'image']) {
         const value = data.get(field)
         formErrors[field] = { messages: errors[field], value: typeof value === 'string' ? value : undefined }
       }
     }
-
-    return Astro.redirect('/showcase/dashboard/')
   } catch (error) {
     let message = 'Something went wrong. Please try again later.'
 
@@ -48,9 +54,10 @@ if (Astro.request.method === 'POST') {
 
 <StarlightPage frontmatter={{ title: '// TODO(HiDeoo) ', tableOfContents: false }}>
   <FormErrorCard error={formErrors.submit} />
-  <form method="post">
+  <form enctype="multipart/form-data" method="post">
     <FormField error={formErrors.url} label="URL" name="url" placeholder="// TODO(HiDeoo) " required type="url" />
     <FormField error={formErrors.name} label="Name" name="name" placeholder="// TODO(HiDeoo) " required type="text" />
+    <FormField error={formErrors.image} label="Image" name="image" required type="file" />
     <button type="submit">Submit</button>
   </form>
 </StarlightPage>

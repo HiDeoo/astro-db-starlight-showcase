@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 import type { ShowcaseEntry } from '../libs/showcase'
 
 interface Props {
@@ -8,10 +10,14 @@ interface Props {
 }
 
 const { entry, showControls = false, showAdminControls = false } = Astro.props
+
+const imageUrl = new URL(entry.imageFileName, import.meta.env.R2_BUCKET_PUBLIC_URL)
 ---
 
 <li>
   <a href={entry.url}>
+    <Image alt="// TODO(HiDeoo) " src={imageUrl.toString()} width="800" height="450" />
+    <p>{imageUrl}</p>
     <p>{entry.name}</p>
   </a>
   {

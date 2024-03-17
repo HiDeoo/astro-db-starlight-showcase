@@ -27,10 +27,10 @@ const ShowcaseEntry = defineTable({
     userId: column.text({ references: () => ShowcaseUser.columns.id }),
     url: column.text({ unique: true }),
     name: column.text({ unique: true }),
+    imageFileName: column.text({ unique: true }),
     approved: column.boolean({ default: false }),
     createdAt: column.date({ default: sql`CURRENT_TIMESTAMP` }),
     updatedAt: column.date({ optional: true }),
-    // TODO(HiDeoo) image
   },
 })
 
