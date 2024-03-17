@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+import FormErrorCard, { type FormError } from '../components/FormErrorCard.astro'
+
+type Props = HTMLAttributes<'form'> & {
+  error?: FormError
+}
+
+const { error, ...formProps } = Astro.props
+---
+
+<starlight-showcase-form>
+  <form {...formProps}>
+    <FormErrorCard error={error} />
+    <slot />
+  </form>
+</starlight-showcase-form>
+
+<script>
+  customElements.define(
+    'starlight-showcase-form',
+    class StarlightShowcaseForm extends HTMLElement {
+      constructor() {
+        super()
+
+        const form = this.querySelector('form')
+
+        form?.addEventListener('submit', (event) => {
+          event.preventDefault()
+
+          // Disable all buttons to prevent multiple submissions.
+          this.querySelectorAll('button').forEach((button) => {
+            button.disabled = true
+          })
+
+          form?.submit()
+        })
+      }
+    },
+  )
+</script>

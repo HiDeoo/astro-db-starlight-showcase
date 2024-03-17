@@ -29,12 +29,19 @@ export function getTouchedUnapprovedShowcaseEntries() {
 export async function addShowcaseEntry(user: ShowcaseUser, url: string, name: string, image: File) {
   const imageFileName = await uploadImage(image)
 
-  return db.insert(ShowcaseEntry).values({
-    userId: user.id,
-    url: url,
-    name: name,
-    imageFileName,
-  })
+  try {
+    await db.insert(ShowcaseEntry).values({
+      userId: user.id,
+      url: url,
+      name: name,
+      imageFileName,
+    })
+  } catch (error) {
+    // If saving the entry fails, delete the image to avoid orphaned files.
+    await deleteImage(imageFileName)
+
+    throw error
+  }
 }
 
 export function getUserShowcaseEntries(user: ShowcaseUser) {

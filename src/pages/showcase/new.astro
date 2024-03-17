@@ -2,7 +2,8 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { LibsqlError } from '@libsql/client'
 
-import FormErrorCard, { type FormErrors } from '../../components/FormErrorCard.astro'
+import Form from '../../components/Form.astro'
+import type { FormErrors } from '../../components/FormErrorCard.astro'
 import FormField from '../../components/FormField.astro'
 import { addShowcaseEntrySchema } from '../../libs/schema'
 import { addShowcaseEntry } from '../../libs/showcase'
@@ -19,7 +20,6 @@ if (Astro.request.method === 'POST') {
   try {
     const data = await Astro.request.formData()
     const parsedNewEntry = await addShowcaseEntrySchema.safeParseAsync(data)
-    console.log('🚨 [new.astro:22] parsedNewEntry:', parsedNewEntry)
 
     if (parsedNewEntry.success) {
       await addShowcaseEntry(
@@ -53,11 +53,10 @@ if (Astro.request.method === 'POST') {
 ---
 
 <StarlightPage frontmatter={{ title: '// TODO(HiDeoo) ', tableOfContents: false }}>
-  <FormErrorCard error={formErrors.submit} />
-  <form enctype="multipart/form-data" method="post">
+  <Form enctype="multipart/form-data" error={formErrors.submit} method="post">
     <FormField error={formErrors.url} label="URL" name="url" placeholder="// TODO(HiDeoo) " required type="url" />
     <FormField error={formErrors.name} label="Name" name="name" placeholder="// TODO(HiDeoo) " required type="text" />
     <FormField error={formErrors.image} label="Image" name="image" required type="file" />
     <button type="submit">Submit</button>
-  </form>
+  </Form>
 </StarlightPage>

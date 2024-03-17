@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 
+import Form from './Form.astro'
 import type { ShowcaseEntry } from '../libs/showcase'
 
 interface Props {
@@ -22,20 +23,20 @@ const imageUrl = new URL(entry.imageFileName, import.meta.env.R2_BUCKET_PUBLIC_U
   </a>
   {
     showControls && (
-      <form method="post">
+      <Form method="post">
         <input type="hidden" name="action" value="delete" />
         <input type="hidden" name="id" value={entry.id} />
         <button type="submit">Delete</button>
-      </form>
+      </Form>
     )
   }
   {
     showAdminControls && (
-      <form method="post">
+      <Form method="post">
         <input type="hidden" name="action" value={entry.approved ? 'reject' : 'approve'} />
         <input type="hidden" name="id" value={entry.id} />
         <button type="submit">{entry.approved ? 'Reject' : 'Approve'}</button>
-      </form>
+      </Form>
     )
   }
 </li>
