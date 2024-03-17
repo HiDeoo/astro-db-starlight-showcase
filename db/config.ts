@@ -1,4 +1,4 @@
-import { defineDb, defineTable, column } from "astro:db";
+import { defineDb, defineTable, column } from 'astro:db'
 
 const ShowcaseEntry = defineTable({
   columns: {
@@ -11,8 +11,8 @@ const ShowcaseEntry = defineTable({
     // TODO(HiDeoo) validatedAt
     // TODO(HiDeoo) public
   },
-});
+})
 
 export default defineDb({
   tables: { ShowcaseEntry },
-});
+})
