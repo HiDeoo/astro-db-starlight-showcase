@@ -1,0 +1,17 @@
+---
+import { db, ShowcaseEntry } from 'astro:db';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+const showcaseEntries = await db.select().from(ShowcaseEntry);
+---
+
+<StarlightPage frontmatter={{ title: 'Showcase', tableOfContents: false }}>
+  {
+    showcaseEntries.map(({ url, title }) => (
+      <article>
+        <p>URL: {url}</p>
+        <p>TITLE: {title}</p>
+      </article>
+    ))
+  }
+</StarlightPage>
