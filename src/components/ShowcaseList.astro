@@ -10,6 +10,14 @@ interface Props {
 const { entries, showControls } = Astro.props
 ---
 
-<ul>
-  {entries.map((entry) => <ShowcaseCard {entry} {showControls} />)}
-</ul>
+{
+  entries.length === 0 ? (
+    <p>No entries found</p>
+  ) : (
+    <ul>
+      {entries.map((entry) => (
+        <ShowcaseCard {entry} {showControls} />
+      ))}
+    </ul>
+  )
+}
