@@ -2,7 +2,7 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 
 import ShowcaseList from '../../components/ShowcaseList.astro'
-import { getApprovedShowcaseEntries } from '../../libs/showcase'
+import { getApprovedShowcaseEntries, isUserAdmin } from '../../libs/showcase'
 
 export const prerender = false
 
@@ -15,9 +15,12 @@ const entries = await getApprovedShowcaseEntries()
   </div>
   {
     Astro.locals.user ? (
-      <form method="post" action="/showcase/logout">
-        <button>Sign out</button>
-      </form>
+      <>
+        <div>{isUserAdmin(Astro.locals.user) ? 'ADMIN' : 'NOT ADMIN'}</div>
+        <form method="post" action="/showcase/logout">
+          <button>Sign out</button>
+        </form>
+      </>
     ) : (
       <div>
         <a href="/showcase/login">Login</a>
