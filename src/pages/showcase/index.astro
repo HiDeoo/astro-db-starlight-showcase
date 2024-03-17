@@ -2,10 +2,26 @@
 import { db, ShowcaseEntry } from 'astro:db'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 
+export const prerender = false
+
 const showcaseEntries = await db.select().from(ShowcaseEntry)
 ---
 
 <StarlightPage frontmatter={{ title: 'Showcase', tableOfContents: false }}>
+  <div>
+    <a href="/showcase/new">Add new entry</a>
+  </div>
+  {
+    Astro.locals.user ? (
+      <form method="post" action="/showcase/logout">
+        <button>Sign out</button>
+      </form>
+    ) : (
+      <div>
+        <a href="/showcase/login">Login</a>
+      </div>
+    )
+  }
   {
     showcaseEntries.map(({ url, title }) => (
       <article>

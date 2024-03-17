@@ -1,0 +1,13 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+
+export const prerender = false
+
+if (!Astro.locals.user) {
+  return Astro.redirect('/showcase/login/')
+}
+---
+
+<StarlightPage frontmatter={{ title: '// TODO(HiDeoo) ', tableOfContents: false }}>
+  <div>New</div>
+</StarlightPage>
