@@ -7,13 +7,13 @@ const ShowcaseSession = defineTable({
   columns: {
     id: column.text({ primaryKey: true }),
     expiresAt: column.date(),
-    userId: column.number({ references: () => ShowcaseUser.columns.id }),
+    userId: column.text({ references: () => ShowcaseUser.columns.id }),
   },
 })
 
 const ShowcaseUser = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
+    id: column.text({ primaryKey: true }),
     gitHubId: column.number({ unique: true }),
     gitHubLogin: column.text({ unique: true }),
     gitHubName: column.text({ optional: true }),
@@ -23,8 +23,8 @@ const ShowcaseUser = defineTable({
 
 const ShowcaseEntry = defineTable({
   columns: {
-    id: column.number({ primaryKey: true }),
-    userId: column.number({ references: () => ShowcaseUser.columns.id }),
+    id: column.text({ primaryKey: true }),
+    userId: column.text({ references: () => ShowcaseUser.columns.id }),
     url: column.text({ unique: true }),
     name: column.text({ unique: true }),
     imageFileName: column.text({ unique: true }),

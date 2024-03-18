@@ -1,7 +1,7 @@
 import { OAuth2RequestError } from 'arctic'
 import type { APIRoute } from 'astro'
 import { db, eq, ShowcaseUser } from 'astro:db'
-import type { Session } from 'lucia'
+import { generateId, type Session } from 'lucia'
 
 import { GITHUB_OAUTH_STATE_COOKIE_NAME, getGitHubUser, github, lucia } from '../../../../libs/auth'
 
@@ -25,11 +25,12 @@ export const GET: APIRoute = async ({ cookies, redirect, url }) => {
     let session: Session
 
     if (existingUser) {
-      session = await lucia.createSession(String(existingUser.id), {})
+      session = await lucia.createSession(existingUser.id, {})
     } else {
       const newUser = await db
         .insert(ShowcaseUser)
         .values({
+          id: generateId(36),
           gitHubId: githubUser.id,
           gitHubLogin: githubUser.login,
           gitHubName: githubUser.name,
@@ -37,7 +38,7 @@ export const GET: APIRoute = async ({ cookies, redirect, url }) => {
         .returning()
         .get()
 
-      session = await lucia.createSession(String(newUser.id), {})
+      session = await lucia.createSession(newUser.id, {})
     }
 
     const cookie = lucia.createSessionCookie(session.id)

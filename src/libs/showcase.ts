@@ -1,4 +1,6 @@
 import { and, db, desc, eq, isNotNull, isNull, ShowcaseEntry, ShowcaseUser, sql } from 'astro:db'
+import { generateId } from 'lucia'
+
 import { uploadImage, deleteImage } from './r2'
 
 export const PERMISSIONS = {
@@ -31,6 +33,7 @@ export async function addShowcaseEntry(user: ShowcaseUser, url: string, name: st
 
   try {
     await db.insert(ShowcaseEntry).values({
+      id: generateId(36),
       userId: user.id,
       url: url,
       name: name,

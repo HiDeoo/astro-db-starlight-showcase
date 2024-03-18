@@ -6,7 +6,6 @@ import { Lucia } from 'lucia'
 export const GITHUB_OAUTH_STATE_COOKIE_NAME = 'adss-github-oauth-state'
 
 // https://github.com/pilcrowOnPaper/lucia-adapter-astrodb
-// @ts-expect-error The adapter is expecting a string user ID, but we're using a number.
 const adapter = new AstroDBAdapter(db, ShowcaseSession, ShowcaseUser)
 
 // https://lucia-auth.com/reference/main/Lucia/
