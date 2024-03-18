@@ -1,0 +1,83 @@
+---
+import { LibsqlError } from '@libsql/client'
+
+import Form from '../../components/Form.astro'
+import type { FormErrors } from '../../components/FormErrorCard.astro'
+import FormField from '../../components/FormField.astro'
+import ShowcasePage from '../../components/ShowcasePage.astro'
+import { addShowcaseEntrySchema } from '../../libs/schema'
+import { addShowcaseEntry } from '../../libs/showcase'
+
+export const prerender = false
+
+if (!Astro.locals.user) {
+  return Astro.redirect('/showcase/login/')
+}
+
+const formErrors: FormErrors = {}
+
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData()
+    const parsedNewEntry = await addShowcaseEntrySchema.safeParseAsync(data)
+
+    if (parsedNewEntry.success) {
+      await addShowcaseEntry(
+        Astro.locals.user,
+        parsedNewEntry.data.url,
+        parsedNewEntry.data.name,
+        parsedNewEntry.data.image,
+      )
+
+      return Astro.redirect('/showcase/dashboard/')
+    } else {
+      const errors = Object.fromEntries(Object.entries(parsedNewEntry.error.flatten().fieldErrors))
+
+      for (const field of ['url', 'name', 'image']) {
+        const value = data.get(field)
+        formErrors[field] = { messages: errors[field], value: typeof value === 'string' ? value : undefined }
+      }
+    }
+  } catch (error) {
+    let message = 'Something went wrong. Please try again later.'
+
+    if (error instanceof LibsqlError && error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      message = 'This showcase entry already exists.'
+    } else {
+      console.error('Failed to submit new showcase entry', error)
+    }
+
+    formErrors['submit'] = { messages: [message] }
+  }
+}
+---
+
+<ShowcasePage title="Showcase - New">
+  <Form enctype="multipart/form-data" error={formErrors.submit} method="post">
+    <FormField error={formErrors.url} label="URL" name="url" placeholder="https://example.com/" required type="url" />
+    <FormField error={formErrors.name} label="Name" name="name" placeholder="My Super Project" required type="text" />
+    <FormField error={formErrors.image} label="Image" name="image" required type="file" />
+    <button type="submit">Submit</button>
+  </Form>
+</ShowcasePage>
+
+<style>
+  button {
+    background: var(--sl-color-text-accent);
+    border: none;
+    border-radius: 999rem;
+    color: var(--sl-color-black);
+    cursor: pointer;
+    font-size: var(--sl-text-base);
+    font-weight: 500;
+    line-height: 1.1875;
+    margin-top: 1rem;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+  }
+
+  button[disabled] {
+    background-color: color-mix(in srgb, var(--sl-color-text-accent), transparent 30%);
+    cursor: not-allowed;
+  }
+</style>

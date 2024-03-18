@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+import FormErrorCard, { type FormError } from './FormErrorCard.astro'
+
+interface Props {
+  error?: FormError
+  label: string
+  name: string
+  placeholder?: string
+  required?: boolean
+  type: HTMLAttributes<'input'>['type']
+}
+
+const { error, label, name, placeholder, required = false, type } = Astro.props
+---
+
+<label>
+  <span>{label}</span>
+  <input autocomplete="off" {name} {placeholder} {required} {type} value={error?.value} />
+</label>
+<FormErrorCard {error} />
+
+<style>
+  label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  span {
+    font-size: var(--sl-text-lg);
+    font-weight: 600;
+  }
+
+  input {
+    display: block;
+    background-color: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    max-width: 20rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+  }
+
+  input::placeholder {
+    color: var(--sl-color-gray-3);
+  }
+</style>

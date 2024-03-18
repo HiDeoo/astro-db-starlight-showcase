@@ -1,0 +1,39 @@
+---
+import FormErrorCard, { type FormErrors } from '../../components/FormErrorCard.astro'
+import ShowcaseList from '../../components/ShowcaseList.astro'
+import ShowcasePage from '../../components/ShowcasePage.astro'
+import { deleteUsersShowcaseEntry, getUserShowcaseEntries } from '../../libs/showcase'
+import { deleteShowcaseEntrySchema } from '../../libs/schema'
+
+export const prerender = false
+
+if (!Astro.locals.user) {
+  return Astro.redirect('/showcase/login/')
+}
+
+const formErrors: FormErrors = {}
+
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData()
+    const deleteAction = deleteShowcaseEntrySchema.parse(data)
+
+    await deleteUsersShowcaseEntry(Astro.locals.user, deleteAction.id)
+  } catch (error) {
+    console.error('Failed to delete showcase entry', error)
+    formErrors['submit'] = { messages: ['Something went wrong. Please try again later.'] }
+  }
+}
+
+const entries = await getUserShowcaseEntries(Astro.locals.user)
+---
+
+<ShowcasePage title="Showcase - Dashboard">
+  <FormErrorCard error={formErrors.submit} />
+  <ShowcaseList
+    {entries}
+    showControls
+    placeholder="Nothing yet! Start by adding a new showcase entry."
+    title="Your Showcase Entries"
+  />
+</ShowcasePage>

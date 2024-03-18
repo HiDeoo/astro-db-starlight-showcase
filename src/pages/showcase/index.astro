@@ -1,0 +1,13 @@
+---
+import ShowcasePage from '../../components/ShowcasePage.astro'
+import ShowcaseList from '../../components/ShowcaseList.astro'
+import { getApprovedShowcaseEntries } from '../../libs/showcase'
+
+export const prerender = false
+
+const entries = await getApprovedShowcaseEntries()
+---
+
+<ShowcasePage title="Showcase">
+  <ShowcaseList {entries} />
+</ShowcasePage>

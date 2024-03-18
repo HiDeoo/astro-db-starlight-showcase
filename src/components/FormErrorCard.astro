@@ -1,0 +1,34 @@
+---
+export interface FormError {
+  messages?: string[]
+  value?: string
+}
+
+export type FormErrors = Record<string, FormError>
+
+interface Props {
+  error?: FormError
+}
+
+const { error } = Astro.props
+
+if (!error?.messages) {
+  return
+}
+---
+
+<ul>
+  {error.messages.map((message) => <li>{message}</li>)}
+</ul>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-color: var(--sl-color-red);
+    background-color: var(--sl-color-red-low);
+    color: var(--sl-color-red-high);
+    padding: 0.25rem 0.5rem;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+import FormErrorCard, { type FormErrors } from '../../components/FormErrorCard.astro'
+import ShowcaseList from '../../components/ShowcaseList.astro'
+import ShowcasePage from '../../components/ShowcasePage.astro'
+import {
+  getApprovedShowcaseEntries,
+  getPristineUnapprovedShowcaseEntries,
+  getTouchedUnapprovedShowcaseEntries,
+  isUserAdmin,
+  toggleShowcaseEntryApproval,
+} from '../../libs/showcase'
+import { changeApprovalShowcaseEntrySchema } from '../../libs/schema'
+
+export const prerender = false
+
+if (!Astro.locals.user || !isUserAdmin(Astro.locals.user)) {
+  return Astro.redirect('/showcase/login/')
+}
+
+const formErrors: FormErrors = {}
+
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData()
+    const approvalAction = changeApprovalShowcaseEntrySchema.parse(data)
+
+    await toggleShowcaseEntryApproval(approvalAction.id, approvalAction.action === 'approve')
+  } catch (error) {
+    console.error('Failed to toggle showcase entry approval', error)
+    formErrors['submit'] = { messages: ['Something went wrong. Please try again later.'] }
+  }
+}
+
+const pristineUnapprovedEntries = await getPristineUnapprovedShowcaseEntries()
+const approvedEntries = await getApprovedShowcaseEntries()
+const touchedUnapprovedEntries = await getTouchedUnapprovedShowcaseEntries()
+---
+
+<ShowcasePage title="Showcase - Admin">
+  <FormErrorCard error={formErrors.submit} />
+  <ShowcaseList entries={pristineUnapprovedEntries} showAdminControls title="Pending" />
+  {approvedEntries.length > 0 && <ShowcaseList entries={approvedEntries} showAdminControls title="Approved" />}
+  {
+    touchedUnapprovedEntries.length > 0 && (
+      <ShowcaseList entries={touchedUnapprovedEntries} showAdminControls title="Rejected" />
+    )
+  }
+</ShowcasePage>

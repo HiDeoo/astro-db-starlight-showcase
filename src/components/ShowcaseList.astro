@@ -1,0 +1,41 @@
+---
+import ShowcaseCard from '../components/ShowcaseCard.astro'
+import type { ShowcaseEntry } from '../libs/showcase'
+
+interface Props {
+  entries: ShowcaseEntry[]
+  placeholder?: string
+  showControls?: boolean
+  showAdminControls?: boolean
+  title?: string
+}
+
+const { entries, placeholder, showControls, showAdminControls, title } = Astro.props
+---
+
+{title && <h2>{title}</h2>}
+{
+  entries.length === 0 ? (
+    <p>{placeholder ?? 'Nothing yet! Check back later.'}</p>
+  ) : (
+    <ul>
+      {entries.map((entry) => (
+        <ShowcaseCard {entry} {showControls} {showAdminControls} />
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 10.5em));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  ul > :global(*) {
+    margin-top: 0 !important;
+  }
+</style>
