@@ -1,54 +1,32 @@
-# Starlight Starter Kit: Basics
+<div align="center">
+  <h1>astro-db-starlight-showcase 🚧</h1>
+  <p>A Starlight showcase page using Astro DB.</p>
+</div>
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+> [!NOTE]  
+> This repository is shared for demonstration purposes only, written in a limited amount of time, and is not intended to be used as a production-ready application.
+>
+> The goal is to demonstrate how one might use Astro DB in a Starlight application, handle form and image validation, and interface with other services such as GitHub and Cloudflare R2.
 
-```
-npm create astro@latest -- --template starlight
-```
+## Features
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/starlight/tree/main/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/starlight/tree/main/examples/basics)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwithastro%2Fstarlight%2Ftree%2Fmain%2Fexamples%2Fbasics&project-name=my-starlight-docs&repository-name=my-starlight-docs)
+This repository contains a basic example of a showcase related set of custom pages in a Starlight application using Astro DB.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Users can login using their GitHub account and submit their own showcase entry which must include a name, a URL, and an image at specific dimensions.
+Users with the `admin` permission can approve or reject entries.
+Approved entries are displayed on the showcase page for everyone to see.
 
-## 🚀 Project Structure
+- GitHub authentication powered by [Lucia](https://lucia-auth.com/)
+- Image hosted on [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/)
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+## How to run
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   ├── docs/
-│   │   └── config.ts
-│   └── env.d.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-```
+1. The application requires various environment variables to be set. Duplicate the `.env.example` file and rename it to `.env.development.local`. Then, fill in the required values (the example file contains links to the documentation for each service).
+1. Install the dependencies using `pnpm install`.
+1. Run the application using `pnpm dev`.
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+## License
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+Licensed under the MIT License, Copyright © HiDeoo.
 
-Static assets, like favicons, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+See [LICENSE](https://github.com/HiDeoo/astro-db-starlight-showcase/blob/main/LICENSE) for more information.
