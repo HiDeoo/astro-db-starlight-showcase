@@ -30,5 +30,10 @@ const entries = await getUserShowcaseEntries(Astro.locals.user)
 
 <ShowcasePage title="Showcase - Dashboard">
   <FormErrorCard error={formErrors.submit} />
-  <ShowcaseList {entries} showControls />
+  <ShowcaseList
+    {entries}
+    showControls
+    placeholder="Nothing yet! Start by adding a new showcase entry."
+    title="Your Showcase Entries"
+  />
 </ShowcasePage>

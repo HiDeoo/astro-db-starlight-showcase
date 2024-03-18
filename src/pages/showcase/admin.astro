@@ -38,10 +38,11 @@ const touchedUnapprovedEntries = await getTouchedUnapprovedShowcaseEntries()
 
 <ShowcasePage title="Showcase - Admin">
   <FormErrorCard error={formErrors.submit} />
-  <h2>Pristine UNAPPROVED</h2>
-  <ShowcaseList entries={pristineUnapprovedEntries} showAdminControls />
-  <h2>APPROVED</h2>
-  {approvedEntries.length > 0 && <ShowcaseList entries={approvedEntries} showAdminControls />}
-  <h2>TOUCHED UNAPPROVED</h2>
-  {touchedUnapprovedEntries.length > 0 && <ShowcaseList entries={touchedUnapprovedEntries} showAdminControls />}
+  <ShowcaseList entries={pristineUnapprovedEntries} showAdminControls title="Pending" />
+  {approvedEntries.length > 0 && <ShowcaseList entries={approvedEntries} showAdminControls title="Approved" />}
+  {
+    touchedUnapprovedEntries.length > 0 && (
+      <ShowcaseList entries={touchedUnapprovedEntries} showAdminControls title="Rejected" />
+    )
+  }
 </ShowcasePage>
