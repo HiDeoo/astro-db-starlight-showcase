@@ -1,5 +1,6 @@
 import { defineDb, defineTable, column, sql } from 'astro:db'
 
+// TODO(HiDeoo)
 // import { PERMISSIONS } from '../src/libs/showcase'
 
 // https://lucia-auth.com/reference/main/Session
@@ -17,7 +18,7 @@ const ShowcaseUser = defineTable({
     gitHubId: column.number({ unique: true }),
     gitHubLogin: column.text({ unique: true }),
     gitHubName: column.text({ optional: true }),
-    permissions: column.number({ default: 0 }),
+    permissions: column.number({ default: sql`0::integer` }),
   },
 })
 
