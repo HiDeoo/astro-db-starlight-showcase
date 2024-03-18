@@ -9,9 +9,9 @@ export default defineConfig({
   integrations: [
     db(),
     starlight({
-      title: 'My Docs',
+      title: 'Starlight Showcase with Astro DB ',
       social: {
-        github: 'https://github.com/withastro/starlight',
+        github: 'https://github.com/hideoo/astro-db-starlight-showcase',
       },
       sidebar: [
         {
