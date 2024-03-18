@@ -1,7 +1,7 @@
 import { OAuth2RequestError } from 'arctic'
 import type { APIRoute } from 'astro'
 import { db, eq, ShowcaseUser } from 'astro:db'
-import { generateId, type Session } from 'lucia'
+import type { Session } from 'lucia'
 
 import { GITHUB_OAUTH_STATE_COOKIE_NAME, getGitHubUser, github, lucia } from '../../../../libs/auth'
 
@@ -30,7 +30,6 @@ export const GET: APIRoute = async ({ cookies, redirect, url }) => {
       const newUser = await db
         .insert(ShowcaseUser)
         .values({
-          id: generateId(36),
           gitHubId: githubUser.id,
           gitHubLogin: githubUser.login,
           gitHubName: githubUser.name,

@@ -13,7 +13,7 @@ const ShowcaseSession = defineTable({
 
 const ShowcaseUser = defineTable({
   columns: {
-    id: column.text({ primaryKey: true }),
+    id: column.text({ primaryKey: true, default: sql`uuid()` }),
     gitHubId: column.number({ unique: true }),
     gitHubLogin: column.text({ unique: true }),
     gitHubName: column.text({ optional: true }),
@@ -23,7 +23,7 @@ const ShowcaseUser = defineTable({
 
 const ShowcaseEntry = defineTable({
   columns: {
-    id: column.text({ primaryKey: true }),
+    id: column.text({ primaryKey: true, default: sql`uuid()` }),
     userId: column.text({ references: () => ShowcaseUser.columns.id }),
     url: column.text({ unique: true }),
     name: column.text({ unique: true }),
