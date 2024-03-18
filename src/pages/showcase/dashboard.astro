@@ -1,8 +1,7 @@
 ---
-import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-
 import FormErrorCard, { type FormErrors } from '../../components/FormErrorCard.astro'
 import ShowcaseList from '../../components/ShowcaseList.astro'
+import ShowcasePage from '../../components/ShowcasePage.astro'
 import { deleteUsersShowcaseEntry, getUserShowcaseEntries } from '../../libs/showcase'
 import { deleteShowcaseEntrySchema } from '../../libs/schema'
 
@@ -29,7 +28,7 @@ if (Astro.request.method === 'POST') {
 const entries = await getUserShowcaseEntries(Astro.locals.user)
 ---
 
-<StarlightPage frontmatter={{ title: '// TODO(HiDeoo) ', tableOfContents: false }}>
+<ShowcasePage title="Showcase - Dashboard">
   <FormErrorCard error={formErrors.submit} />
   <ShowcaseList {entries} showControls />
-</StarlightPage>
+</ShowcasePage>

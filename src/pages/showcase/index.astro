@@ -1,32 +1,13 @@
 ---
-import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-
-import Form from '../../components/Form.astro'
+import ShowcasePage from '../../components/ShowcasePage.astro'
 import ShowcaseList from '../../components/ShowcaseList.astro'
-import { getApprovedShowcaseEntries, isUserAdmin } from '../../libs/showcase'
+import { getApprovedShowcaseEntries } from '../../libs/showcase'
 
 export const prerender = false
 
 const entries = await getApprovedShowcaseEntries()
 ---
 
-<StarlightPage frontmatter={{ title: 'Showcase', tableOfContents: false }}>
-  <div>
-    <a href="/showcase/new">Add new entry</a>
-  </div>
-  {
-    Astro.locals.user ? (
-      <>
-        {isUserAdmin(Astro.locals.user) ? <a href="/showcase/admin">Admin</a> : null}
-        <Form method="post" action="/showcase/logout">
-          <button>Sign out</button>
-        </Form>
-      </>
-    ) : (
-      <div>
-        <a href="/showcase/login">Login</a>
-      </div>
-    )
-  }
+<ShowcasePage title="Showcase">
   <ShowcaseList {entries} />
-</StarlightPage>
+</ShowcasePage>

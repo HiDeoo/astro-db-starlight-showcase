@@ -1,0 +1,66 @@
+---
+import Form from './Form.astro'
+import { isUserAdmin } from '../libs/showcase'
+---
+
+<header class="not-content">
+  {
+    Astro.locals.user ? (
+      <>
+        {isUserAdmin(Astro.locals.user) ? <a href="/showcase/admin/">Admin</a> : null}
+        <a href="/showcase/dashboard/">Dashboard</a>
+        <Form method="post" action="/showcase/logout/">
+          <button>Logout</button>
+        </Form>
+      </>
+    ) : (
+      <a href="/showcase/login/">Login</a>
+    )
+  }
+  <a class="primary" href="/showcase/new/">Add your own!</a>
+</header>
+
+<style>
+  header {
+    border-bottom: 1px solid var(--sl-color-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: flex-end;
+    margin-bottomtom: 1.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  a,
+  button {
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid;
+    border-radius: 999rem;
+    color: var(--sl-color-white);
+    cursor: pointer;
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+    gap: 0.5em;
+    line-height: 1.1875;
+    padding: 0.5rem 1.125rem;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  @media (min-width: 30em) {
+    header {
+      flex-direction: row;
+    }
+
+    a {
+      width: unset;
+    }
+  }
+
+  a.primary {
+    background: var(--sl-color-text-accent);
+    color: var(--sl-color-black);
+  }
+</style>

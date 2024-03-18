@@ -1,8 +1,7 @@
 ---
-import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-
 import FormErrorCard, { type FormErrors } from '../../components/FormErrorCard.astro'
 import ShowcaseList from '../../components/ShowcaseList.astro'
+import ShowcasePage from '../../components/ShowcasePage.astro'
 import {
   getApprovedShowcaseEntries,
   getPristineUnapprovedShowcaseEntries,
@@ -37,7 +36,7 @@ const approvedEntries = await getApprovedShowcaseEntries()
 const touchedUnapprovedEntries = await getTouchedUnapprovedShowcaseEntries()
 ---
 
-<StarlightPage frontmatter={{ title: '// TODO(HiDeoo) ', tableOfContents: false }}>
+<ShowcasePage title="Showcase - Admin">
   <FormErrorCard error={formErrors.submit} />
   <h2>Pristine UNAPPROVED</h2>
   <ShowcaseList entries={pristineUnapprovedEntries} showAdminControls />
@@ -45,4 +44,4 @@ const touchedUnapprovedEntries = await getTouchedUnapprovedShowcaseEntries()
   {approvedEntries.length > 0 && <ShowcaseList entries={approvedEntries} showAdminControls />}
   <h2>TOUCHED UNAPPROVED</h2>
   {touchedUnapprovedEntries.length > 0 && <ShowcaseList entries={touchedUnapprovedEntries} showAdminControls />}
-</StarlightPage>
+</ShowcasePage>
