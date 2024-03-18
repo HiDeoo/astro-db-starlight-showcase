@@ -10,7 +10,7 @@ type Props = HTMLAttributes<'form'> & {
 const { error, ...formProps } = Astro.props
 ---
 
-<starlight-showcase-form>
+<starlight-showcase-form class="not-content">
   <form {...formProps}>
     <FormErrorCard error={error} />
     <slot />

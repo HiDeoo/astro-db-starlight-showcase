@@ -15,10 +15,9 @@ const { entry, showControls = false, showAdminControls = false } = Astro.props
 const imageUrl = new URL(entry.imageFileName, import.meta.env.R2_BUCKET_PUBLIC_URL)
 ---
 
-<li>
+<li class="not-content sl-flex">
   <a href={entry.url}>
-    <Image alt="// TODO(HiDeoo) " src={imageUrl.toString()} width="800" height="450" />
-    <p>{imageUrl}</p>
+    <Image alt="" class="preview" src={imageUrl.toString()} width="800" height="450" />
     <p>{entry.name}</p>
   </a>
   {
@@ -26,7 +25,9 @@ const imageUrl = new URL(entry.imageFileName, import.meta.env.R2_BUCKET_PUBLIC_U
       <Form method="post">
         <input type="hidden" name="action" value="delete" />
         <input type="hidden" name="id" value={entry.id} />
-        <button type="submit">Delete</button>
+        <button class="danger" type="submit">
+          Delete
+        </button>
       </Form>
     )
   }
@@ -35,8 +36,79 @@ const imageUrl = new URL(entry.imageFileName, import.meta.env.R2_BUCKET_PUBLIC_U
       <Form method="post">
         <input type="hidden" name="action" value={entry.approved ? 'reject' : 'approve'} />
         <input type="hidden" name="id" value={entry.id} />
-        <button type="submit">{entry.approved ? 'Reject' : 'Approve'}</button>
+        <button class={entry.approved ? 'danger' : ''} type="submit">
+          {entry.approved ? 'Reject' : 'Approve'}
+        </button>
       </Form>
     )
   }
 </li>
+
+<style>
+  li {
+    display: flex;
+    flex-direction: column;
+  }
+
+  a {
+    box-shadow: var(--sl-shadow-sm);
+    border-radius: 0.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    flex-direction: column;
+    overflow: hidden;
+    text-decoration: none;
+    width: 100%;
+  }
+
+  a:hover {
+    border-color: var(--sl-color-gray-2);
+    background-color: var(--sl-color-gray-7, var(--sl-color-gray-6));
+  }
+
+  a:has(+ starlight-showcase-form) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+  }
+
+  .preview {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    max-width: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    display: block;
+  }
+
+  p {
+    color: var(--sl-color-white);
+    font-weight: 600;
+    line-height: var(--sl-line-height-headings);
+    padding: 0.75rem 1rem;
+  }
+
+  button {
+    border: 1px solid var(--sl-color-gray-5);
+    border-top-color: transparent;
+    border-radius: 0;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  button {
+    background-color: var(--sl-color-gray-6);
+    box-shadow: var(--sl-shadow-sm);
+    font-weight: 500 !important;
+    padding: 0.25rem 1rem;
+  }
+
+  button:hover {
+    background-color: color-mix(in srgb, var(--sl-color-green), transparent 60%);
+  }
+
+  button.danger:hover {
+    background-color: color-mix(in srgb, var(--sl-color-red), transparent 50%);
+  }
+</style>

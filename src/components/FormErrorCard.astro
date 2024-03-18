@@ -17,9 +17,18 @@ if (!error?.messages) {
 }
 ---
 
-<div>
-  <h2>Errors</h2>
-  <ul>
-    {error.messages.map((message) => <li>{message}</li>)}
-  </ul>
-</div>
+<ul>
+  {error.messages.map((message) => <li>{message}</li>)}
+</ul>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-color: var(--sl-color-red);
+    background-color: var(--sl-color-red-low);
+    color: var(--sl-color-red-high);
+    padding: 0.25rem 0.5rem;
+  }
+</style>
