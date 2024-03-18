@@ -31,10 +31,10 @@ export const addShowcaseEntrySchema = zfd.formData({
 
 export const deleteShowcaseEntrySchema = zfd.formData({
   action: zfd.text(z.literal('delete')),
-  id: zfd.text(z.string().uuid()),
+  id: zfd.numeric(),
 })
 
 export const changeApprovalShowcaseEntrySchema = zfd.formData({
   action: zfd.text(z.union([z.literal('approve'), z.literal('reject')])),
-  id: zfd.text(z.string().uuid()),
+  id: zfd.numeric(),
 })

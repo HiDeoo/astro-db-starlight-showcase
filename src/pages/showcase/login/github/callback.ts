@@ -21,21 +21,12 @@ export const GET: APIRoute = async ({ cookies, redirect, url }) => {
     const tokens = await github.validateAuthorizationCode(code)
     const githubUser = await getGitHubUser(tokens.accessToken)
     const existingUser = await db.select().from(ShowcaseUser).where(eq(ShowcaseUser.gitHubId, githubUser.id)).get()
-    console.log('🚨 [callback.ts:24] existingUser:', existingUser)
 
     let session: Session
 
     if (existingUser) {
-      session = await lucia.createSession(existingUser.id, {})
+      session = await lucia.createSession(String(existingUser.id), {})
     } else {
-      // FIXME(HiDeoo)
-      console.log('adding user to db...')
-      console.log({
-        gitHubId: githubUser.id,
-        gitHubLogin: githubUser.login,
-        gitHubName: githubUser.name,
-      })
-
       const newUser = await db
         .insert(ShowcaseUser)
         .values({
@@ -46,7 +37,7 @@ export const GET: APIRoute = async ({ cookies, redirect, url }) => {
         .returning()
         .get()
 
-      session = await lucia.createSession(newUser.id, {})
+      session = await lucia.createSession(String(newUser.id), {})
     }
 
     const cookie = lucia.createSessionCookie(session.id)
